@@ -1,1 +1,1 @@
-# DeepLearingEx2
+# DeepLearningEx2
