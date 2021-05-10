@@ -3,9 +3,9 @@ import dataset_utils
 import numpy as np
 
 def create_dataset(mean, sigma, sample_size, num_samples):
-    dataset = []
+    dataset = np.ndarray(shape=(num_samples, sample_size), dtype='float')
     for i in range(num_samples):
-        dataset.append(np.random.normal(mean, sigma, sample_size))
+        dataset[i] = np.random.normal(mean, sigma, sample_size)
     return dataset
 
 

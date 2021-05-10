@@ -12,10 +12,10 @@ def save_dataset(filename, dataset):
     with open(filename, 'wb') as f:
         pickle.dump(dataset, f)
 
-def dataset_loader(filename):
+def load_dataset(filename):
     dataset = []
     with open(filename, 'rb') as f:
         dataset = pickle.load(f)
-    return dataset
+    return torch.from_numpy(dataset).float()
     
 
