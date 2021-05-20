@@ -8,9 +8,8 @@ import logging
 from torch.utils.data import DataLoader
 import pickle
 
-
 parser = argparse.ArgumentParser(description='train a lstm auto encoder over synthetic dataset')
-parser.add_argument('--ephocs', type=int, help='number of ephocs')
+parser.add_argument('--epochs', type=int, help='number of epochs')
 parser.add_argument('--optimizer', help='optimizer for algorithm (Adam,SGD)')
 parser.add_argument('--lr', type=float, help='learning rate')
 parser.add_argument('--gd_clip', type=int, help='gradient clipping value')
@@ -18,28 +17,38 @@ parser.add_argument('--batch_size', type=int, help='batch size')
 parser.add_argument('--hidden_state_size', type=int, help='hidden state size of lstm')
 parser.add_argument('--dataset_file_prefix', help='dataset file prefix')
 parser.add_argument('--stats_file', help='output file for statistics')
+parser.add_argument('--model_save_path', help='output file for model')
 
 
 args = parser.parse_args()
 
-ephocs = args.ephocs
+epochs = args.epochs
 optimizer = args.optimizer
 learning_rate = args.lr
 clip = args.gd_clip
 batch_size = args.batch_size
 hidden_state_size = args.hidden_state_size
 dataset_prefix = args.dataset_file_prefix
+save_path = args.model_save_path
 
 logging.basicConfig(filename="lstm_ae_train.log", filemode='w', format='%(asctime)s %(levelname)-8s %(message)s', level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
+train = dataset_utils.load_dataset('{}_{}.pkl'.format(dataset_prefix, 'train'))
+val = dataset_utils.load_dataset('{}_{}.pkl'.format(dataset_prefix, 'val'))
+test = dataset_utils.load_dataset('{}_{}.pkl'.format(dataset_prefix, 'test'))
 
-dataset_train = DataLoader(dataset_utils.load_dataset('{}_{}.pkl'.format(dataset_prefix, 'train')), batch_size=args.batch_size, shuffle=True)
+print(len(train))
+print(len(val))
+print(len(test))
 
-dataset_validation = DataLoader(dataset_utils.load_dataset('{}_{}.pkl'.format(dataset_prefix, 'val')), batch_size=args.batch_size, shuffle=True)
 
-dataset_test = DataLoader(dataset_utils.load_dataset('{}_{}.pkl'.format(dataset_prefix, 'test')), batch_size=args.batch_size, shuffle=True)
+dataset_train = DataLoader(train, batch_size=args.batch_size, shuffle=True)
+
+dataset_validation = DataLoader(val, batch_size=args.batch_size, shuffle=True)
+
+dataset_test = DataLoader(test, batch_size=args.batch_size, shuffle=True)
 
 model = lstm_model.LSTM_AE_Model(device, input_size=1, hidden_dim=hidden_state_size)
 model.to(device)
@@ -56,18 +65,18 @@ train_loss = []
 
 logging.info('start training')
 best_loss = 99999
-for epoch in range(ephocs):  # loop over the dataset multiple times
-    train_loss.append(model.train_model(dataset_train, device, optimizer, criterion, 50))
+for epoch in range(epochs):  # loop over the dataset multiple times
+    train_loss.append(model.train_model(dataset_train, device, optimizer, criterion, clip, 1, 50))
     logging.info('train loss {}, epoch {}'.format(train_loss[-1], epoch))
-    evaluation_loss.append(model.evaluate_model(dataset_validation, device, criterion, 50))
+    evaluation_loss.append(model.evaluate_model(dataset_validation, device, criterion, 1, 50))
     logging.info('evaluation loss {}, epoch {}'.format(evaluation_loss[-1], epoch))
     if evaluation_loss[-1] < best_loss:
         best_loss = evaluation_loss[-1]
-        torch.save(model.state_dict(), 'best_lstm_ae.model')
+        torch.save(model.state_dict(), save_path)
     logging.info('best loss {}, epoch {}'.format(best_loss, epoch))
 
-model.load_state_dict(torch.load('best_lstm_ae.model'))
-test_loss = model.evaluate_model(dataset_test, device, criterion, 50)
+model.load_state_dict(torch.load(save_path))
+test_loss = model.evaluate_model(dataset_test, device, criterion, 1, 50)
 
 file_data = {}
 file_data['test_data'] = test_loss
