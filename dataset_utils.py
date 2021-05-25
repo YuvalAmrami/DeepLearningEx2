@@ -1,5 +1,5 @@
 import torch
-import numpy
+import numpy as np
 import pickle
 from sklearn.model_selection import train_test_split
 import torchvision.datasets as datasets
@@ -35,5 +35,36 @@ def load_mnist_dataset(with_labels):
     else:
         train, val = train_test_split(train, test_size=0.25, random_state=1)
         return train, val, test
-    
+
+
+def split_stocks_dataset(stocks, atmp_name=''):
+    # stocks.sort(['symbol', 'date']
+    names = stocks['symbol']
+    names = names[names.duplicated( )== False]
+    data = []
+    for name in names:
+        stock = stocks.loc[stocks['symbol'] == name]
+        stock = stock['close'].values
+        if (stock.shape == (1007,)):
+            data.append(stock)
+
+    print(type(data))
+    data = np.array(data);
+    print(type(data))
+
+    train, val, test = split_dataset(data)
+
+    save_dataset('{}_{}.pkl'.format(atmp_name, 'train'), train)
+    save_dataset('{}_{}.pkl'.format(atmp_name, 'val'), val)
+    save_dataset('{}_{}.pkl'.format(atmp_name, 'test'), test)
+
+    train = torch.from_numpy(train).float()
+    val = torch.from_numpy(val).float()
+    test = torch.from_numpy(test).float()
+
+
+    # create all possible sequences of length look_back
+    # for index in range(size - look_back):
+    #     data.append(data_raw[index: index + look_back])
+    return train, val, test
 
