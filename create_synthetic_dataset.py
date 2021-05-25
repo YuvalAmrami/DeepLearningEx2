@@ -12,7 +12,6 @@ def create_dataset(mean, sigma, sample_size, num_samples):
 parser = argparse.ArgumentParser(description='train a lstm over a videos dataset')
 parser.add_argument('--num_samples', type=int, help='number of samples for dataset')
 parser.add_argument('--sample_size', type=int, help='the size of the samples sequence')
-parser.add_argument('--output_file_prefix', help='output file prefix')
 
 
 args = parser.parse_args()
@@ -25,6 +24,6 @@ print(np.max(train))
 print(np.mean(train))
 print(train.shape)
 
-dataset_utils.save_dataset('{}_{}.pkl'.format(args.output_file_prefix, 'train'), train)
-dataset_utils.save_dataset('{}_{}.pkl'.format(args.output_file_prefix, 'val'), val)
-dataset_utils.save_dataset('{}_{}.pkl'.format(args.output_file_prefix, 'test'), test)
+dataset_utils.save_dataset('{}_{}.pkl'.format("synthetic_dataset", 'train'), train)
+dataset_utils.save_dataset('{}_{}.pkl'.format("synthetic_dataset", 'val'), val)
+dataset_utils.save_dataset('{}_{}.pkl'.format("synthetic_dataset", 'test'), test)
