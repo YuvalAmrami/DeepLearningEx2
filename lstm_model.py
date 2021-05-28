@@ -14,20 +14,17 @@ class LSTM_AE_Model(nn.Module):
         self._lstm_encoder = nn.LSTM(self._input_size, self._hidden_dim, 1, batch_first=True)
         self._lstm_decoder = nn.LSTM(self._hidden_dim, self._input_size, 1, batch_first=True)
         self._device = device
+        self._relative_seq_len = int(self._seq_len / self._input_size)
         self._last_layer = nn.Linear(self._seq_len, self._seq_len)
         
     def forward(self, x):
         _, (hidden, _) = self._lstm_encoder(x)
         hidden = hidden.view(-1, 1, self._hidden_dim)
-        hidden = hidden.repeat(1, self._seq_len, 1)
+        hidden = hidden.repeat(1, self._relative_seq_len, 1)
         x, _ = self._lstm_decoder(hidden)
-        x = x.view(-1, self._seq_len, self._input_size)
-        if self._input_size == 1:
-            x = torch.squeeze(x, 2)
+        x = x.reshape(-1, self._seq_len)
         x = self._last_layer(x)
-        if self._input_size == 1:
-            return x.unsqueeze(2)
-        return x
+        return x.reshape(-1, self._relative_seq_len, self._input_size)
 
     def train_model(self, dataset_generator, device, optimizer, criterion, clip, sample_size, seq_len):
         self.train(True)

@@ -42,8 +42,8 @@ parser.add_argument('--lr', type=float, help='learning rate')
 parser.add_argument('--gd_clip', type=int, help='gradient clipping value')
 parser.add_argument('--batch_size', type=int, help='batch size')
 parser.add_argument('--hidden_dim', type=int, help='hidden state size')
-parser.add_argument('--stats_file', help='output folder for tensor board')
-parser.add_argument('--model_save_path', help='output file for model')
+parser.add_argument('--stats_file_prefix', help='output folder for tensorboard')
+parser.add_argument('--model_file_prefix', help='output file for model')
 parser.add_argument('--input_size', type=int, help='input size')
 parser.add_argument('--grid_search', type=bool, help='perform grid search over hyper parameters')
 
@@ -54,18 +54,18 @@ args = parser.parse_args()
 epochs = args.epochs
 optimizer = args.optimizer
 batch_size = args.batch_size
-save_path = args.model_save_path
+save_path = args.model_file_prefix
 grid_search = args.grid_search
-stats_file = args.stats_file
+stats_file = args.stats_file_prefix
 input_size = args.input_size
 if not grid_search:
     learning_rate = args.lr
     hidden_dim = args.hidden_dim
     clip = args.gd_clip
 else:
-    learning_rate = [0.0001]
+    learning_rate = [0.0005]
     hidden_dim = [128, 256]
-    clip = [1, 0.5, 0.1]
+    clip = [0.5, 0.1]
 
 logging.basicConfig(filename="lstm_ae_train.log", filemode='w', format='%(asctime)s %(levelname)-8s %(message)s', level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
 
@@ -83,8 +83,6 @@ validation_dataset = DataLoader(val, batch_size=args.batch_size, shuffle=True)
 test_dataset = DataLoader(test, batch_size=args.batch_size, shuffle=True)
 criterion = nn.MSELoss()
 
-seq_len = int(50 / input_size)
-
 if grid_search:
     best_test_loss = 99999
     for lr in learning_rate:
@@ -94,7 +92,7 @@ if grid_search:
                 comment = f'gradient_clip = {cp} lr = {lr} hidden_dim = {hidden} ephochs = {epochs}'
                 tb = SummaryWriter(log_dir=os.path.join(stats_file, comment))
                 
-                model = lstm_model.LSTM_AE_Model(device, input_size=input_size, hidden_dim=hidden, seq_len=seq_len)
+                model = lstm_model.LSTM_AE_Model(device, input_size=input_size, hidden_dim=hidden, seq_len=50)
                 model.to(device)
 
                 if optimizer == 'SGD':
@@ -113,7 +111,7 @@ if grid_search:
 else:
     comment = f'gradient_clip = {clip} lr = {learning_rate} hidden_dim = {hidden_dim}'
     tb = SummaryWriter(log_dir=os.path.join(stats_file, comment))
-    model = lstm_model.LSTM_AE_Model(device, input_size=input_size, hidden_dim=hidden_dim, seq_len=seq_len)
+    model = lstm_model.LSTM_AE_Model(device, input_size=input_size, hidden_dim=hidden_dim, seq_len=50)
     model.to(device)
 
     if optimizer == 'SGD':

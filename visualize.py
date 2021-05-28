@@ -28,15 +28,16 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 if dataset_type == 'mnist':
     seq_len = int(784 / input_size)
     if is_prediction:
-        model = LSTM_AE_Classification_Model(device, 10, input_size, hidden_dim=hidden_dim)
+        model = LSTM_AE_Classification_Model(device, 10, input_size=input_size, hidden_dim=hidden_dim, seq_len=784)
         _, _, dataset = load_mnist_dataset(False)
     else:
-        model = LSTM_AE_Model(device, input_size, hidden_dim=hidden_dim, seq_len=seq_len)
+        print(input_size)
+        model = LSTM_AE_Model(device, input_size=input_size, hidden_dim=hidden_dim, seq_len=784)
         _, _, dataset = load_mnist_dataset(False)
 
 if dataset_type == 'synthetic':
     seq_len = int(50 / input_size)
-    model = LSTM_AE_Model(device, input_size, hidden_dim=hidden_dim, seq_len=seq_len)
+    model = LSTM_AE_Model(device, input_size=input_size, hidden_dim=hidden_dim, seq_len=50)
     dataset = load_dataset('{}_{}.pkl'.format('synthetic_dataset', 'test'))
     
 model.load_state_dict(torch.load(model_path))

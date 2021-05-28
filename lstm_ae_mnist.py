@@ -17,11 +17,11 @@ parser = argparse.ArgumentParser(description='train a lstm auto encoder over syn
 parser.add_argument('--epochs', type=int, help='number of ephocs')
 parser.add_argument('--optimizer', help='optimizer for algorithm (Adam,SGD)')
 parser.add_argument('--lr', type=float, help='learning rate')
-parser.add_argument('--gd_clip', type=int, help='gradient clipping value')
+parser.add_argument('--gd_clip', type=float, help='gradient clipping value')
 parser.add_argument('--batch_size', type=int, help='batch size')
 parser.add_argument('--hidden_dim', type=int, help='hidden dim')
 parser.add_argument('--prediction', type=bool, default=False, help='output file for statistics')
-parser.add_argument('--stats_file_prefix', help='output file for statistics')
+parser.add_argument('--stats_file_prefix', help='output folder for tensorboard')
 parser.add_argument('--model_file_prefix', help='output file for model')
 parser.add_argument('--input_size', type=int, help='input size')
 
@@ -40,7 +40,6 @@ save_path = '{}_{}_{}_{}.model'.format(save_path, learning_rate, hidden_dim, cli
 input_size = args.input_size
 stats_file = args.stats_file_prefix
 print(is_prediction_task)
-torch.autograd.set_detect_anomaly(True)
 
 logging.basicConfig(filename="lstm_ae_train.log", filemode='w', format='%(asctime)s %(levelname)-8s %(message)s', level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
 
@@ -48,12 +47,12 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 seq_len = int(784 / input_size)
 
 if is_prediction_task:
-    model = LSTM_AE_Classification_Model(device, 10, input_size=input_size, hidden_dim=hidden_dim, seq_len=seq_len)
+    model = LSTM_AE_Classification_Model(device, 10, input_size=input_size, hidden_dim=hidden_dim, seq_len=784)
     model.to(device)
     classification_criterion = nn.CrossEntropyLoss()
     train, val, test = dataset_utils.load_mnist_dataset(True)
 else:
-    model = LSTM_AE_Model(device, input_size=input_size, hidden_dim=hidden_dim, seq_len=seq_len)
+    model = LSTM_AE_Model(device, input_size=input_size, hidden_dim=hidden_dim, seq_len=784)
     model.to(device)
     train, val, test = dataset_utils.load_mnist_dataset(False)
 
@@ -96,7 +95,7 @@ for epoch in range(epochs):  # loop over the dataset multiple times
             torch.save(model.state_dict(), save_path)
         tb.add_scalar("Train Loss", train_loss, epoch)
         tb.add_scalar("Validation Loss", val_loss, epoch)
-        logging.info('finished epoch, best loss {}'.format(epoch, best_loss))
+        logging.info('finished epoch {}, best loss {}'.format(epoch, best_loss))
 
 model.load_state_dict(torch.load(save_path))
 if is_prediction_task:
