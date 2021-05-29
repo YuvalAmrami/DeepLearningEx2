@@ -1,3 +1,4 @@
+import sklearn
 import torch
 import numpy as np
 import pickle
@@ -54,6 +55,20 @@ def strip_names(data):
     # print(names.size)
     return names, data_no_names
 
+# def devid_to_x_y_name(data):
+#     data_no_names = []
+#     y_data_no_names = []
+#     names = []
+#     for (da, name) in data:
+#         data_no_names.append(da)
+#         y_data_no_names.append(da[1:])
+#         names.append(name)
+#     data_no_names =np.array(data_no_names)
+#     names = np.array(names)
+#     # print(data_no_names.size)
+#     # print(names.size)
+#     return names, y_data_no_names, data_no_names
+
 
 def split_stocks_dataset(stocks, atmp_name='', pred=False):
 
@@ -61,6 +76,8 @@ def split_stocks_dataset(stocks, atmp_name='', pred=False):
     names = stocks['symbol']
     names = names[names.duplicated( )== False]
     data = []
+    ydata = []
+
     for name in names:
         stock = stocks.loc[stocks['symbol'] == name]
         stock = stock['close'].values
@@ -69,22 +86,16 @@ def split_stocks_dataset(stocks, atmp_name='', pred=False):
             stock_mean = np.mean(stock)
             stock = stock - (stock_mean - 0.5)
             if pred:
-                # print("a")
-
-                topples = []
-                for index in range(len(stock) - 1):
-                    topples = (stock[index], stock[index + 1])
-                data.append((topples, name))
+                data.append((stock, name))
             else:
                 data.append((stock, name))
-                # print(stock.shape)
-                # print(data.__sizeof__())
+
     data = np.array(data)
     X_rest, X_test = train_test_split(data, test_size=0.2, random_state=1)
-    save_dataset('{}_{}.pkl'.format(atmp_name, 'test'), test)
+    save_dataset('{}_{}.pkl'.format(atmp_name, 'test'), X_test)
     return X_rest, X_test
 
-    +  # old vertion
+    # old vertion
     # def split_stocks_dataset(stocks, atmp_name='', pred=False):
     #     # stocks.sort(['symbol', 'date']
     #     names = stocks['symbol']
