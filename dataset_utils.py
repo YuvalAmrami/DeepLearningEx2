@@ -6,7 +6,7 @@ import torchvision.datasets as datasets
 from torchvision import transforms
 
 
-transform = transforms.Compose([transforms.ToTensor()])
+transform_mnist = transforms.Compose([transforms.ToTensor()])
 
 def split_dataset(dataset):
     X_train, X_test = train_test_split(dataset, test_size=0.2, random_state=1)
@@ -25,8 +25,8 @@ def load_dataset(filename):
 
 
 def load_mnist_dataset(with_labels):
-    train = datasets.MNIST(root='data', train=True, download=True, transform=transform)
-    test = datasets.MNIST(root='data', train=False, download=True, transform=transform)
+    train = datasets.MNIST(root='data', train=True, download=True, transform=transform_mnist)
+    test = datasets.MNIST(root='data', train=False, download=True, transform=transform_mnist)
     if not with_labels:
         train = [x[0] for x in train]
         train, val = train_test_split(train, test_size=0.25, random_state=1)
@@ -49,7 +49,7 @@ def split_stocks_dataset(stocks, atmp_name=''):
             data.append(stock)
 
     print(type(data))
-    data = np.array(data);
+    data = np.array(data)
     print(type(data))
 
     train, val, test = split_dataset(data)
