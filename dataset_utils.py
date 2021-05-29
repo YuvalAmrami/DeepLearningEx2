@@ -8,6 +8,12 @@ from torchvision import transforms
 
 transform = transforms.Compose([transforms.ToTensor()])
 
+def load_dataset_with_name(filename):
+    dataset = []
+    with open(filename, 'rb') as f:
+        dataset = pickle.load(f)
+    return dataset
+
 def split_dataset(dataset):
     X_train, X_test = train_test_split(dataset, test_size=0.2, random_state=1)
     X_train, X_val = train_test_split(X_train, test_size=0.25, random_state=1) # 0.25 x 0.8 = 0.2
@@ -36,8 +42,21 @@ def load_mnist_dataset(with_labels):
         train, val = train_test_split(train, test_size=0.25, random_state=1)
         return train, val, test
 
+def strip_names(data):
+    data_no_names = []
+    names = []
+    for (da, name) in data:
+        data_no_names.append(da)
+        names.append(name)
+    data_no_names =np.array(data_no_names)
+    names = np.array(names)
+    # print(data_no_names.size)
+    # print(names.size)
+    return names, data_no_names
 
-def split_stocks_dataset(stocks, atmp_name=''):
+
+def split_stocks_dataset(stocks, atmp_name='', pred=False):
+
     # stocks.sort(['symbol', 'date']
     names = stocks['symbol']
     names = names[names.duplicated( )== False]
@@ -46,25 +65,53 @@ def split_stocks_dataset(stocks, atmp_name=''):
         stock = stocks.loc[stocks['symbol'] == name]
         stock = stock['close'].values
         if (stock.shape == (1007,)):
-            data.append(stock)
+            sklearn.preprocessing.minmax_scale(stock, feature_range=(0, 1), axis=0, copy=False)
+            stock_mean = np.mean(stock)
+            stock = stock - (stock_mean - 0.5)
+            if pred:
+                # print("a")
 
-    print(type(data))
-    data = np.array(data);
-    print(type(data))
-
-    train, val, test = split_dataset(data)
-
-    save_dataset('{}_{}.pkl'.format(atmp_name, 'train'), train)
-    save_dataset('{}_{}.pkl'.format(atmp_name, 'val'), val)
+                topples = []
+                for index in range(len(stock) - 1):
+                    topples = (stock[index], stock[index + 1])
+                data.append((topples, name))
+            else:
+                data.append((stock, name))
+                # print(stock.shape)
+                # print(data.__sizeof__())
+    data = np.array(data)
+    X_rest, X_test = train_test_split(data, test_size=0.2, random_state=1)
     save_dataset('{}_{}.pkl'.format(atmp_name, 'test'), test)
+    return X_rest, X_test
 
-    train = torch.from_numpy(train).float()
-    val = torch.from_numpy(val).float()
-    test = torch.from_numpy(test).float()
-
-
-    # create all possible sequences of length look_back
-    # for index in range(size - look_back):
-    #     data.append(data_raw[index: index + look_back])
-    return train, val, test
-
+    +  # old vertion
+    # def split_stocks_dataset(stocks, atmp_name='', pred=False):
+    #     # stocks.sort(['symbol', 'date']
+    #     names = stocks['symbol']
+    #     names = names[names.duplicated( )== False]
+    #     data = []
+    #     for name in names:
+    #         stock = stocks.loc[stocks['symbol'] == name]
+    #         stock = stock['close'].values
+    #         if (stock.shape == (1007, )):
+    #             sklearn.preprocessing.minmax_scale(stock, feature_range=(0, 1), axis=0, copy=False)
+    #             if pred:
+    #                 topples = []
+    #                 for index in (len(stock)-1):
+    #                     topples = (stock[index], stock[index+1])
+    #                 data.append((topples, name))
+    #             else:
+    #                 data.append((stock, name))
+    #     train, val, test = split_dataset(data)
+    #
+    #     save_dataset('{}_{}.pkl'.format(atmp_name, 'train'), train)
+    #     save_dataset('{}_{}.pkl'.format(atmp_name, 'val'), val)
+    #     save_dataset('{}_{}.pkl'.format(atmp_name, 'test'), test)
+    #
+    #     _, train = strip_names(train)
+    #     train = torch.from_numpy(train).float()
+    #     _, val = strip_names(val)
+    #     val = torch.from_numpy(val).float()
+    #     _, test = strip_names(test)
+    #     test = torch.from_numpy(test).float()
+    #     return train, val, test

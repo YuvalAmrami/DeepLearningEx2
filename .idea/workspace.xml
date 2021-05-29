@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e0ffa585-9b58-4282-b406-091c3707c727" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/lstm_model_predicter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataset_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lstm_ae_mnist.py" beforeDir="false" afterPath="$PROJECT_DIR$/lstm_ae_mnist.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lstm_ae_snp500.py" beforeDir="false" afterPath="$PROJECT_DIR$/lstm_ae_snp500.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lstm_ae_toy.py" beforeDir="false" afterPath="$PROJECT_DIR$/lstm_ae_toy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/visualize.py" beforeDir="false" afterPath="$PROJECT_DIR$/visualize.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/visualize_graphs.py" beforeDir="false" afterPath="$PROJECT_DIR$/visualize_graphs.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1t2GiNBVmnhbI3gNDx3JU8ry7Sc" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/snp500_modle_pics" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Yuval\Documents\GitHub\DeepLearningEx2_Daniel" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.lstm_ae_snp500">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="DeepLearningEx2_Daniel" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="lstm_ae_snp500" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/lstm_ae_snp500.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="lstm_ae_toy" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DeepLearningEx2_Daniel" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/lstm_ae_toy.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="visualize" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DeepLearningEx2_Daniel" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/visualize.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="visualize_graphs" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="DeepLearningEx2_Daniel" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/visualize_graphs.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.lstm_ae_snp500" />
+        <item itemvalue="Python.visualize" />
+        <item itemvalue="Python.visualize_graphs" />
+        <item itemvalue="Python.lstm_ae_toy" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e0ffa585-9b58-4282-b406-091c3707c727" name="Default Changelist" comment="" />
+      <created>1621959897250</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1621959897250</updated>
+      <workItem from="1621959903268" duration="57528000" />
+      <workItem from="1622225727857" duration="21480000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="-1506" y="176" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1621959761385">
+      <screen x="-1920" y="1" width="1920" height="1040" />
+    </state>
+    <state x="-1506" y="176" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.802/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1621959761385" />
+    <state x="-1242" y="323" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1622023134242">
+      <screen x="-1920" y="1" width="1920" height="1040" />
+    </state>
+    <state x="-1242" y="323" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.802/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1622023134242" />
+    <state x="536" y="0" width="794" height="802" key="#lstm_ae_snp500" timestamp="1622283576481">
+      <screen x="0" y="0" width="1536" height="802" />
+    </state>
+    <state x="-1250" y="116" width="780" height="809" key="#lstm_ae_snp500/0.0.1536.802/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1621959847532" />
+    <state x="536" y="0" width="794" height="802" key="#lstm_ae_snp500/0.0.1536.802/-1920.1.1920.1040@0.0.1536.802" timestamp="1622283576481" />
+    <state x="484" y="0" key="#lstm_ae_snp500B" timestamp="1622283612488">
+      <screen x="0" y="0" width="1536" height="802" />
+    </state>
+    <state x="484" y="0" key="#lstm_ae_snp500B/0.0.1536.802/-1920.1.1920.1040@0.0.1536.802" timestamp="1622283612488" />
+    <state x="549" y="141" key="FileChooserDialogImpl" timestamp="1622216489478">
+      <screen x="0" y="0" width="1536" height="802" />
+    </state>
+    <state x="549" y="141" key="FileChooserDialogImpl/0.0.1536.802/-1920.1.1920.1040@0.0.1536.802" timestamp="1622216489478" />
+    <state width="1493" height="193" key="GridCell.Tab.0.bottom" timestamp="1622283256129">
+      <screen x="0" y="0" width="1536" height="802" />
+    </state>
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1536.802/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1622033944890" />
+    <state width="1493" height="193" key="GridCell.Tab.0.bottom/0.0.1536.802/-1920.1.1920.1040@0.0.1536.802" timestamp="1622283256129" />
+    <state width="1877" height="260" key="GridCell.Tab.0.bottom/0.0.1920.1012/0.1080.1536.824@0.0.1920.1012" timestamp="1622227164025" />
+    <state width="1493" height="193" key="GridCell.Tab.0.center" timestamp="1622283256129">
+      <screen x="0" y="0" width="1536" height="802" />
+    </state>
+    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1536.802/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1622033944890" />
+    <state width="1493" height="193" key="GridCell.Tab.0.center/0.0.1536.802/-1920.1.1920.1040@0.0.1536.802" timestamp="1622283256129" />
+    <state width="1877" height="260" key="GridCell.Tab.0.center/0.0.1920.1012/0.1080.1536.824@0.0.1920.1012" timestamp="1622227164025" />
+    <state width="1493" height="193" key="GridCell.Tab.0.left" timestamp="1622283256129">
+      <screen x="0" y="0" width="1536" height="802" />
+    </state>
+    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1536.802/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1622033944890" />
+    <state width="1493" height="193" key="GridCell.Tab.0.left/0.0.1536.802/-1920.1.1920.1040@0.0.1536.802" timestamp="1622283256129" />
+    <state width="1877" height="260" key="GridCell.Tab.0.left/0.0.1920.1012/0.1080.1536.824@0.0.1920.1012" timestamp="1622227164025" />
+    <state width="1493" height="193" key="GridCell.Tab.0.right" timestamp="1622283256129">
+      <screen x="0" y="0" width="1536" height="802" />
+    </state>
+    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1536.802/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1622033944890" />
+    <state width="1493" height="193" key="GridCell.Tab.0.right/0.0.1536.802/-1920.1.1920.1040@0.0.1536.802" timestamp="1622283256129" />
+    <state width="1877" height="260" key="GridCell.Tab.0.right/0.0.1920.1012/0.1080.1536.824@0.0.1920.1012" timestamp="1622227164025" />
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom" timestamp="1622023430445">
+      <screen x="-1920" y="1" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.1536.802/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1622023430445" />
+    <state width="1877" height="348" key="GridCell.Tab.1.center" timestamp="1622023430445">
+      <screen x="-1920" y="1" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.1536.802/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1622023430445" />
+    <state width="1877" height="348" key="GridCell.Tab.1.left" timestamp="1622023430445">
+      <screen x="-1920" y="1" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.1536.802/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1622023430445" />
+    <state width="1877" height="348" key="GridCell.Tab.1.right" timestamp="1622023430445">
+      <screen x="-1920" y="1" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.1536.802/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1622023430445" />
+    <state x="-1459" y="166" key="SettingsEditor" timestamp="1621984788607">
+      <screen x="-1920" y="1" width="1920" height="1040" />
+    </state>
+    <state x="-1459" y="166" key="SettingsEditor/0.0.1536.802/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1621984788607" />
+    <state x="-1359" y="131" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1621981540031">
+      <screen x="-1920" y="1" width="1920" height="1040" />
+    </state>
+    <state x="-1359" y="131" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1536.802/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1621981540031" />
+    <state x="968" y="99" width="549" height="614" key="find.popup" timestamp="1622276853757">
+      <screen x="0" y="0" width="1536" height="802" />
+    </state>
+    <state x="-710" y="130" width="586" height="795" key="find.popup/0.0.1536.802/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1622021230649" />
+    <state x="968" y="99" width="549" height="614" key="find.popup/0.0.1536.802/-1920.1.1920.1040@0.0.1536.802" timestamp="1622276853757" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/lstm_ae_mnist.py</url>
+          <line>59</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/lstm_ae_toy.py</url>
+          <line>78</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/visualize_graphs.py</url>
+          <line>17</line>
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/visualize_graphs.py</url>
+          <line>21</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/DeepLearningEx2_Daniel$lstm_ae_toy.coverage" NAME="lstm_ae_toy Coverage Results" MODIFIED="1621983452012" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/DeepLearningEx2_Daniel$visualize.coverage" NAME="visualize Coverage Results" MODIFIED="1622216406783" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/DeepLearningEx2_Daniel$visualize_graphs.coverage" NAME="visualize_graphs Coverage Results" MODIFIED="1622008639915" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/DeepLearningEx2_Daniel$lstm_ae_mnist.coverage" NAME="lstm_ae_mnist Coverage Results" MODIFIED="1621980943355" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/DeepLearningEx2_Daniel$lstm_ae_snp500.coverage" NAME="lstm_ae_snp500 Coverage Results" MODIFIED="1622275990932" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>
