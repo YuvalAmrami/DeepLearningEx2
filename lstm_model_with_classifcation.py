@@ -29,7 +29,8 @@ class LSTM_AE_Classification_Model(nn.Module):
 
     def train_model(self, dataset_generator, device, optimizer, criterion, classification_criterion, clip, sample_size, seq_len):
         self.train(True)
-        current_loss = 0.0
+        current_reconstruction_loss = 0.0
+        current_prediction_loss = 0.0
         accuracy = 0.0
         num_labels = 0.0
         num_batches = 0.0
@@ -42,21 +43,24 @@ class LSTM_AE_Classification_Model(nn.Module):
             inputs, labels = inputs.to(device), labels.to(device)
             # forward + backward + optimize
             outputs, predictions = self(inputs)
-            loss = criterion(outputs, inputs)
-            loss += classification_criterion(predictions, labels)
+            reconstruction_loss = criterion(outputs, inputs)
+            prediction_loss = classification_criterion(predictions, labels)
             # print statistics
-            current_loss += loss.item()
+            current_reconstruction_loss += reconstruction_loss.item()
+            current_prediction_loss += prediction_loss.item()
+            loss = reconstruction_loss + prediction_loss
             loss.backward()
             torch.nn.utils.clip_grad_norm_(self.parameters(), clip)
             optimizer.step()
             accuracy += (labels == torch.argmax(predictions, dim=1)).float().sum()
             num_labels += labels.shape[0]
             num_batches += 1
-        return current_loss / num_batches, accuracy / num_labels
+        return current_reconstruction_loss / num_batches, current_prediction_loss / num_batches, accuracy / num_labels
 
     def evaluate_model(self, dataset_generator, device, criterion, classification_criterion, sample_size, seq_len):
         self.eval()
-        current_loss = 0.0
+        current_reconstruction_loss = 0.0
+        current_prediction_loss = 0.0
         accuracy = 0.0
         num_labels = 0.0
         num_batches = 0.0
@@ -69,11 +73,12 @@ class LSTM_AE_Classification_Model(nn.Module):
                 inputs, labels = inputs.to(device), labels.to(device)
                 # forward + backward + optimize
                 outputs, predictions = self(inputs)
-                loss = criterion(outputs, inputs)
-                loss += classification_criterion(predictions, labels)
+                reconstruction_loss = criterion(outputs, inputs)
+                prediction_loss = classification_criterion(predictions, labels)
                 # print statistics
-                current_loss += loss.item()
+                current_reconstruction_loss += reconstruction_loss.item()
+                current_prediction_loss += prediction_loss.item()
                 accuracy += (labels == torch.argmax(predictions, dim=1)).float().sum()
                 num_labels += labels.shape[0]
                 num_batches += 1
-        return current_loss / num_batches, accuracy / num_labels
+        return current_reconstruction_loss / num_batches, current_prediction_loss / num_batches, accuracy / num_labels
