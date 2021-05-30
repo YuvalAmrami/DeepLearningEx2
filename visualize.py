@@ -12,13 +12,13 @@ import torch
 
 parser = argparse.ArgumentParser(description='visualize lstm auto encoder reconstruction from dataset')
 parser.add_argument('--model_path',
-                    default= 'C:/Users/Yuval/Documents/GitHub/DeepLearningEx2_Daniel/mod_snp_01C_0.001_128_1.model',
+                    default= 'C:/Users/Yuval/Documents/GitHub/DeepLearningEx2_Daniel/itr_1_mod_snp_Re02B_1e-06_128_1.model',
                     help='model file path')
 parser.add_argument('--prediction', type=bool, default=False, help='is prediction lstm')
 parser.add_argument('--dataset_type', default='snp500', help='mnist/synthetic')
 parser.add_argument('--hidden_dim', default=128, type=int, help='hidden state size')
 parser.add_argument('--input_size', default=1, type=int, help='input size')
-parser.add_argument('--test_name', default='snp_01C', help='input size')
+parser.add_argument('--test_name', default='snp_Re02B', help='input size')
 
 args = parser.parse_args()
 model_path = args.model_path
@@ -51,8 +51,8 @@ if dataset_type == 'synthetic':
 
 if dataset_type == 'snp500':
     if is_prediction:
-        seq_len = int(1007 / input_size)
-        model = LSTM_AE_Model_pred(device, 10, input_size, hidden_dim=hidden_dim)
+        seq_len = int(1006 / input_size)
+        model = LSTM_AE_Model_pred(device, input_size=input_size, hidden_dim=hidden_dim, seq_len=seq_len)
         dataset = load_dataset_with_name('{}_{}.pkl'.format(test_name, 'test'))
         names, dataset = strip_names(dataset)
         dataset = torch.from_numpy(dataset).float()
@@ -73,6 +73,7 @@ with torch.no_grad():
     for i in range(3):
         index = np.random.randint(len(dataset))
         example = dataset[index]
+        # example  = example[1:]
         input = example.view(1, seq_len, input_size)
         if is_prediction:
             output, _ = model(input)

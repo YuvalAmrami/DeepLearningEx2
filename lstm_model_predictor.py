@@ -16,7 +16,7 @@ class LSTM_AE_Model_pred(nn.Module):
         self._lstm_decoder = nn.LSTM(self._hidden_dim, self._input_size, 1, batch_first=True)
         self._device = device
         self._last_layer = nn.Linear(self._seq_len, self._seq_len)
-        self.pred_linear_layer = nn.Linear(self._hidden_dim, 1006)
+        self.pred_linear_layer = nn.Linear(self._hidden_dim, self._input_size)
 
     def forward(self, x):
         # y = x[1:]
@@ -28,7 +28,9 @@ class LSTM_AE_Model_pred(nn.Module):
         if self._input_size == 1:
             x = torch.squeeze(x, 2)
         x = self._last_layer(x)
-        y = self.pred_linear_layer(out[:, -1, :])
+        y = self.pred_linear_layer(out[:,:,:])
+        # if self._input_size == 1:
+        #     y = torch.squeeze(y, 2)
         if self._input_size == 1:
             return x.unsqueeze(2), y
         return x, y
@@ -40,25 +42,10 @@ class LSTM_AE_Model_pred(nn.Module):
         for inputs in dataset_generator:
             # get the inputs; data is a list of [inputs, labels]
             # zero the parameter gradients
-            inp = inputs.numpy()
-            y_in = [[1006]]
-            x_in = [[1006]]
-            for i in range(len(inp)):
-                y_in.append(inp[i][1:])
-                x_in.append(inp[i][:-1])
-            y_in = y_in[1:]
-            x_in = x_in[1:]
-            y_in = np.array(y_in)
-            x_in = np.array(x_in)
-            y_in = torch.from_numpy(y_in).float()
-            x_in = torch.from_numpy(x_in).float()
-            # print(y_in.shape)
-            # print(x_in.shape)
+            y_in = inputs[:, 1:]
+            x_in = inputs[:,:-1]
             inputs = x_in.view(-1, seq_len, sample_size)
-            # print(inputs.shape)
-            # y_inputs = y_in.view(-1, seq_len, sample_size)
-            # print(inputs.shape)
-            # print(y_inputs.shape)
+            y_in = y_in.view(-1, seq_len, sample_size)
             optimizer.zero_grad()
             inputs = inputs.to(device)
             y_in = y_in.to(device)
@@ -66,13 +53,10 @@ class LSTM_AE_Model_pred(nn.Module):
             outputs, y_pred = self(inputs)
             loss1 = criterion(outputs, inputs)
             # print statistics
+            # if self._input_size == 1:
+            #     y_in = torch.squeeze(y_in, 2)
             loss2 = criterion(y_in, y_pred)
-            # print('outputs ', outputs.shape)
-            # print('inputs ', inputs.shape)
-            # print('y_in ', y_in.shape)
-            # print('y_pred ', y_pred.shape)
-
-            loss = loss1+loss2
+            loss = (loss1+loss2)/2
             current_loss += loss.item() + loss2.item()
             loss.backward()
             torch.nn.utils.clip_grad_norm_(self.parameters(), clip)
@@ -89,18 +73,9 @@ class LSTM_AE_Model_pred(nn.Module):
             for inputs in dataset_generator:
                 # get the inputs; data is a list of [inputs, labels]
                 # zero the parameter gradients
-                inp = inputs.numpy()
-                y_in = [[1006]]
-                x_in = [[1006]]
-                for i in range(len(inp)):
-                    y_in.append(inp[i][1:])
-                    x_in.append(inp[i][:-1])
-                y_in = y_in[1:]
-                x_in = x_in[1:]
-                y_in = np.array(y_in)
-                x_in = np.array(x_in)
-                y_in = torch.from_numpy(y_in).float()
-                x_in = torch.from_numpy(x_in).float()
+
+                y_in = inputs[:, 1:]
+                x_in = inputs[:, :-1]
 
                 x_in = x_in.view(-1, seq_len, sample_size)
                 x_in = x_in.to(device)
