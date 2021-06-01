@@ -25,7 +25,7 @@ parser = argparse.ArgumentParser(description='train a lstm auto encoder over syn
 parser.add_argument('--epochs', type=int, default=7000, help='number of epochs')
 parser.add_argument('--optimizer', default='Adam', help='optimizer for algorithm (Adam,SGD)')
 parser.add_argument('--lr', type=float, default=10**-6, help='learning rate')
-parser.add_argument('--gd_clip', type=int, default=1, help='gradient clipping value')
+parser.add_argument('--gd_clip', type=float, default=1, help='gradient clipping value')
 parser.add_argument('--batch_size', type=int, default=500, help='batch size')
 parser.add_argument('--hidden_dim', type=int, default=128, help='hidden dim')
 parser.add_argument('--prediction', type=bool, default=False, help='output file for statistics')
@@ -49,39 +49,17 @@ save_path = '{}_{}_{}_{}.model'.format(save_path, learning_rate, hidden_dim, cli
 input_size = args.input_size
 stats_file = args.stats_file_prefix
 attempt_name = args.attempt_name
-# num_of_days = args.num_of_days_back
-# stock_name = args.stock_name
 
 print(is_prediction_task)
 
-stocks = pd.read_csv('SP 500 Stock Prices 2014-2017.csv')
-
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-# seq_len = int(1007 / input_size)
 
-if is_prediction_task:
-    seq_len = int(1006 / input_size)
-    model = LSTM_AE_Model_pred(device, input_size=input_size, hidden_dim=hidden_dim, seq_len=seq_len)
-else:
-    seq_len = int(1007 / input_size)
-    model = LSTM_AE_Model(device, input_size=input_size, hidden_dim=hidden_dim, seq_len=seq_len)
-
-model.to(device)
 criterion = nn.MSELoss()
-data_rest, data_test = DU.split_stocks_dataset(stocks, attempt_name, False)
-_, rest = DU.strip_names(data_rest)
+
+dataset = DU.load_dataset_with_name('snp500_{}.pkl'.format('train'))
+_, dataset = DU.strip_names(dataset)
 
 kf = KFold(n_splits=4)
-
-if optimizer == 'SGD':
-    optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9)
-else:
-    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
-
-
-_, test = DU.strip_names(data_test)
-test = torch.from_numpy(test).float()
-dataset_test = DataLoader(test, batch_size=args.batch_size, shuffle=True)
 
 
 #start training
@@ -91,32 +69,27 @@ index = 0
 index_of_best = 0
 save_path2 = save_path
 
-# cross validation
-# if is_prediction_task:
-#     _, y_test, test = DU.devid_to_x_y_name(data_test)
-#
-# else:
+best_model_loss = 99999
 
-for train_name_index, val_name_index in kf.split(rest):
-    train_name, val_name = rest[train_name_index], rest[val_name_index]
+for train_name_index, val_name_index in kf.split(dataset):
+    train_name, val_name = dataset[train_name_index], dataset[val_name_index]
 
     logging.basicConfig(filename="lstm_ae_train_" + attempt_name+"_"+str(index) + ".log", filemode='w',
                         format='%(asctime)s %(levelname)-8s %(message)s',
                         level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
 
-    # print(index, train_name.shape, val_name.shape)
-    # _, val = DU.strip_names(val_name)
-    # _, train = DU.strip_names(train_name)
     val = torch.from_numpy(val_name).float()
     train = torch.from_numpy(train_name).float()
     dataset_validation = DataLoader(val, batch_size=args.batch_size, shuffle=True)
     dataset_train = DataLoader(train, batch_size=args.batch_size, shuffle=True)
 
     if is_prediction_task:
+        seq_len = int(1006 / input_size)
         model = LSTM_AE_Model_pred(device, input_size=input_size, hidden_dim=hidden_dim, seq_len=seq_len)
         model.to(device)
 
     else:
+        seq_len = int(1007 / input_size)
         model = LSTM_AE_Model(device, input_size=input_size, hidden_dim=hidden_dim, seq_len=seq_len)
         model.to(device)
 
@@ -129,43 +102,39 @@ for train_name_index, val_name_index in kf.split(rest):
     evaluation_loss = []
     train_loss = []
     curr_best_accuracy = 0.0
-    curr_best_loss = 99999
+    best_loss = 99999
     save_path = 'itr_'+str(index)+'_'+save_path2
 
     comment = f'gradient_clip = {clip} lr = {learning_rate} hidden_dim = {hidden_dim} ephochs = {epochs} cross_val = {index}'
     tb = SummaryWriter(log_dir=os.path.join(stats_file, comment))
 
     for epoch in range(epochs):  # loop over the dataset multiple times
-        # if is_prediction_task:
+        if is_prediction_task:
+            train_reconstruction_loss, train_prediction_loss = model.train_model(dataset_train, device, optimizer, criterion, clip, input_size, seq_len)
+            val_reconstruction_loss, val_prediction_loss = model.evaluate_model(dataset_validation, device, criterion, input_size, seq_len)
+            sum_loss = val_reconstruction_loss + val_prediction_loss
+            if sum_loss < best_loss:
+                best_loss = sum_loss
+                torch.save(model.state_dict(), save_path)
+            tb.add_scalar("Train Prediction Loss", train_prediction_loss, epoch)
+            tb.add_scalar("Validation Prediction Loss", val_prediction_loss, epoch)
+            tb.add_scalar("Train Reconstruction Loss", train_reconstruction_loss, epoch)
+            tb.add_scalar("Validation Reconstruction Loss", val_reconstruction_loss, epoch)
+            logging.info('finished epoch, best loss {}'.format(epoch, best_loss))
 
-        train_loss = model.train_model(dataset_train, device, optimizer, criterion, clip, input_size, seq_len)
-        val_loss = model.evaluate_model(dataset_validation, device, criterion, input_size, seq_len)
-        if val_loss < curr_best_loss:
-            curr_best_loss = val_loss
-            torch.save(model.state_dict(), save_path)
-        tb.add_scalar("Train Loss", train_loss, epoch)
-        tb.add_scalar("Validation Loss", val_loss, epoch)
-        logging.info('finished epoch, best accuracy {}'.format(epoch, curr_best_accuracy))
+        else:
+            train_loss = model.train_model(dataset_train, device, optimizer, criterion, clip, input_size, seq_len)
+            val_loss = model.evaluate_model(dataset_validation, device, criterion, input_size, seq_len)
+            if val_loss < best_loss:
+                best_loss = val_loss
+                torch.save(model.state_dict(), save_path)
+            tb.add_scalar("Train Loss", train_loss, epoch)
+            tb.add_scalar("Validation Loss", val_loss, epoch)
+            logging.info('finished epoch, best loss {}'.format(epoch, best_loss))
 
-        if (epoch%500==0):
-            print("epoch: "+str(epoch))
-            print("Train Loss")
-            print(train_loss)
-            print("val_loss")
-            print(val_loss)
-            print(index)
-    # end of for loop
-    model.load_state_dict(torch.load(save_path))
-    # if is_prediction_task:
-    curr_test_loss = model.evaluate_model(dataset_test, device, criterion, input_size, seq_len)
-    # else:
-    #     curr_test_loss = model.evaluate_model(dataset_test, device, criterion, input_size, seq_len)
-    logging.info('test loss {}'.format(curr_test_loss))
-
-    if curr_test_loss < test_loss:
-        test_loss = curr_test_loss
-        index_of_best = index
-        print('best index is {}', index_of_best)
+    if best_loss < best_model_loss:
+        best_model_loss = best_loss
+        logging.info('best model is : {}'.format(index))
 
     index = index + 1
 

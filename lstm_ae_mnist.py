@@ -71,7 +71,8 @@ else:
 #start training
 logging.info('start training')
 best_loss = 99999
-best_accuracy = 0.0
+best_sum_loss = 99999
+alpha = 2
 
 comment = f'gradient_clip = {clip} lr = {learning_rate} hidden_dim = {hidden_dim} ephochs = {epochs}'
 tb = SummaryWriter(log_dir=os.path.join(stats_file, comment))
@@ -79,8 +80,9 @@ for epoch in range(epochs):  # loop over the dataset multiple times
     if is_prediction_task:
         train_reconstruction_loss, train_prediction_loss, train_acc = model.train_model(dataset_train, device, optimizer, criterion, classification_criterion, clip, input_size, seq_len)
         val_reconstruction_loss, val_prediction_loss, val_acc = model.evaluate_model(dataset_validation, device, criterion, classification_criterion, input_size, seq_len)
-        if val_acc > best_accuracy:
-            best_accuracy = val_acc
+        sum_loss = val_prediction_loss + val_reconstruction_loss
+        if sum_loss < best_sum_loss:
+            best_sum_loss = sum_loss
             torch.save(model.state_dict(), save_path)
         tb.add_scalar("Train Reconstruction Loss", train_reconstruction_loss, epoch)
         tb.add_scalar("Validation Reconstruction Loss", val_reconstruction_loss, epoch)
@@ -88,7 +90,7 @@ for epoch in range(epochs):  # loop over the dataset multiple times
         tb.add_scalar("Validation Prediction Loss", val_prediction_loss, epoch)
         tb.add_scalar("Train Accuracy", train_acc, epoch)
         tb.add_scalar("Validation Accuracy", val_acc, epoch)
-        logging.info('finished epoch, best accuracy {}'.format(epoch, best_accuracy))
+        logging.info('finished epoch, best sum loss {}'.format(epoch, best_sum_loss))
     else:
         train_loss = model.train_model(dataset_train, device, optimizer, criterion, clip, input_size, seq_len)
         val_loss = model.evaluate_model(dataset_validation, device, criterion, input_size, seq_len)

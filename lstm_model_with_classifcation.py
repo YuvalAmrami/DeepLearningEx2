@@ -45,7 +45,7 @@ class LSTM_AE_Classification_Model(nn.Module):
             outputs, predictions = self(inputs)
             reconstruction_loss = criterion(outputs, inputs)
             prediction_loss = classification_criterion(predictions, labels)
-            # print statistics
+
             current_reconstruction_loss += reconstruction_loss.item()
             current_prediction_loss += prediction_loss.item()
             loss = reconstruction_loss + prediction_loss
@@ -67,15 +67,15 @@ class LSTM_AE_Classification_Model(nn.Module):
         with torch.no_grad():
             for data in dataset_generator:
                 # get the inputs; data is a list of [inputs, labels]
-                # zero the parameter gradients
+
                 inputs, labels = data
                 inputs = inputs.view(-1, seq_len, sample_size)
                 inputs, labels = inputs.to(device), labels.to(device)
-                # forward + backward + optimize
+
                 outputs, predictions = self(inputs)
                 reconstruction_loss = criterion(outputs, inputs)
                 prediction_loss = classification_criterion(predictions, labels)
-                # print statistics
+
                 current_reconstruction_loss += reconstruction_loss.item()
                 current_prediction_loss += prediction_loss.item()
                 accuracy += (labels == torch.argmax(predictions, dim=1)).float().sum()

@@ -13,33 +13,27 @@ from torch.utils.tensorboard import SummaryWriter
 
 def train_model(model, criterion, optimizer, input_size, clip, save_path, tb, train_dataset, validation_dataset, test_dataset):
     #start training
-    evaluation_loss = []
-    train_loss = []
 
     logging.info('start training')
     best_loss = 99999
     seq_len = int(50 / input_size)
     for epoch in range(epochs):  # loop over the dataset multiple times
-        train_loss.append(model.train_model(train_dataset, device, optimizer, criterion, clip, input_size, seq_len))
-        evaluation_loss.append(model.evaluate_model(validation_dataset, device, criterion, input_size, seq_len))
-        if evaluation_loss[-1] < best_loss:
-            best_loss = evaluation_loss[-1]
+        train_loss = model.train_model(train_dataset, device, optimizer, criterion, clip, input_size, seq_len)
+        validation_loss = model.evaluate_model(validation_dataset, device, criterion, input_size, seq_len)
+        if validation_loss < best_loss:
+            best_loss = validation_loss
             torch.save(model.state_dict(), save_path)
         logging.info('best loss {}, finished epoch {}'.format(best_loss, epoch))
-        tb.add_scalar("Train Loss", train_loss[-1], epoch)
-        tb.add_scalar("Validation Loss", evaluation_loss[-1], epoch)
+        tb.add_scalar("Train Loss", train_loss, epoch)
+        tb.add_scalar("Validation Loss", validation_loss, epoch)
 
-    model.load_state_dict(torch.load(save_path))
-    test_loss = model.evaluate_model(test_dataset, device, criterion, input_size, seq_len)
-    tb.add_scalar("Test Loss", test_loss)
-
-    return train_loss, evaluation_loss, test_loss
+    return best_loss
 
 parser = argparse.ArgumentParser(description='train a lstm auto encoder over synthetic dataset')
 parser.add_argument('--epochs', type=int, help='number of epochs')
 parser.add_argument('--optimizer', help='optimizer for algorithm (Adam,SGD)')
 parser.add_argument('--lr', type=float, help='learning rate')
-parser.add_argument('--gd_clip', type=int, help='gradient clipping value')
+parser.add_argument('--gd_clip', type=float, help='gradient clipping value')
 parser.add_argument('--batch_size', type=int, help='batch size')
 parser.add_argument('--hidden_dim', type=int, help='hidden state size')
 parser.add_argument('--stats_file_prefix', help='output folder for tensorboard')
@@ -63,9 +57,9 @@ if not grid_search:
     hidden_dim = args.hidden_dim
     clip = args.gd_clip
 else:
-    learning_rate = [0.0005]
+    learning_rate = [0.0001]
     hidden_dim = [128, 256]
-    clip = [0.5, 0.1]
+    clip = [1, 0.5, 0.1]
 
 logging.basicConfig(filename="lstm_ae_train.log", filemode='w', format='%(asctime)s %(levelname)-8s %(message)s', level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
 
@@ -84,7 +78,7 @@ test_dataset = DataLoader(test, batch_size=args.batch_size, shuffle=True)
 criterion = nn.MSELoss()
 
 if grid_search:
-    best_test_loss = 99999
+    best_validation_loss = 99999
     for lr in learning_rate:
         for hidden in hidden_dim:
             for cp in clip:
@@ -100,12 +94,11 @@ if grid_search:
                 else:
                     optimizer = optim.Adam(model.parameters(), lr=lr)
                 model_path = '{}_{}_{}_{}.model'.format(save_path, lr, hidden, cp)
-                train_loss, validation_loss, test_loss = train_model(model, criterion, optimizer, input_size, cp, model_path, tb, train_dataset, validation_dataset, test_dataset)
-                index = np.argmin(validation_loss)
+                validation_loss = train_model(model, criterion, optimizer, input_size, cp, model_path, tb, train_dataset, validation_dataset, test_dataset)
 
-                if test_loss < best_test_loss:
-                    best_test_loss = test_loss
-                    logging.info('best params , lr {} , hidden {}, clip {}, loss {}'.format(lr, hidden, cp, best_test_loss))
+                if validation_loss < best_validation_loss:
+                    best_validation_loss = validation_loss
+                    logging.info('best params , lr {} , hidden {}, clip {}, loss {}'.format(lr, hidden, cp, best_validation_loss))
                 tb.close()
 
 else:
