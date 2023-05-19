@@ -1,4 +1,6 @@
 # DeepLearningEx2
+A project made for the CS course Practical Deep Learning.
+More information is described in the assignment 2 instructions file: PDL211_HW2.pdf
 
 # train example
 
